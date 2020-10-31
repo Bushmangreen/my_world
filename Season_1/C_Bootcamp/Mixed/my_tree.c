@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+int ceilVal(int a, int b) {
+
+   return (a+b-1) / b;
+
+}
+
+
+
+
+void print_layer(int start, int n, int offset) {
+    
+   // int n = 9;
+   // int layers=3;
+  
+        for (int i = start ; i <=n; ++i) {
+
+            for (int j = i; j < n+offset; ++j)
+                printf(" ");
+
+            for (int k = 0; k < i; ++k)
+                printf("*");
+
+            for (int k = 1; k < i; ++k)
+               printf("*");
+
+            printf("\n");
+        }
+  
+}
+
+
+
+int main(int argc, char* argv[]){
+
+    const char *spaces="                                                                                                    ";
+    const char *dashes="||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||";
+
+
+    int layer = atoi(argv[1]);
+    int n = 3+layer;
+    int cur_layer = 1;
+    int sub_layer = 4;
+    int t = 0;
+    int last_row = n*(n+1)/2-6;
+    int trunk;
+    int start[20];
+    int end[20];
+    int k;
+    int offset[20];
+
+   // calculate all the layers indices,  and how many rows
+    start[0]=1; 
+    end[0]=4;
+    for (int i = 1; i < layer; i++){
+        k = ceilVal(i,2);
+        start[i] = (end[i-1]-k);
+        end[i]=start[i]+i+3;
+        
+    }
+
+    // calculates how many offsets - spaces required to pass to the function
+    for (int i = 0; i < layer; i++){
+
+        offset[i] = end[layer-1] - end[i];
+        printf("%d and %d and %d\n",start[i],end[i], offset[i]);
+    }
+
+    for(int i = 0; i < layer; i++){
+
+        print_layer(start[i],end[i],offset[i]);
+
+    }
+    
+
+
+    for (int i = 1 ; i <= layer; i++) {
+
+
+        printf("%.*s%.*s\n", end[layer-1]-(layer%2==0?layer/2:layer/2+1),spaces, layer, dashes); // for log colculation i need to devide the log thickness by 2 for even 
+                                                                                                //and for odd i need to divide by two and add 1
+    }               
+
+    return 0;
+}
+
+

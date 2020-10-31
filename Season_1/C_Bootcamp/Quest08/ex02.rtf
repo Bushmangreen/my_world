@@ -1,0 +1,63 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red183\green111\blue179;\red23\green23\blue23;\red70\green137\blue204;
+\red194\green126\blue101;\red202\green202\blue202;\red212\green214\blue154;\red140\green211\blue254;\red167\green197\blue152;
+\red89\green138\blue67;\red205\green173\blue106;}
+{\*\expandedcolortbl;;\cssrgb\c77255\c52549\c75294;\cssrgb\c11765\c11765\c11765;\cssrgb\c33725\c61176\c83922;
+\cssrgb\c80784\c56863\c47059;\cssrgb\c83137\c83137\c83137;\cssrgb\c86275\c86275\c66667;\cssrgb\c61176\c86275\c99608;\cssrgb\c70980\c80784\c65882;
+\cssrgb\c41569\c60000\c33333;\cssrgb\c84314\c72941\c49020;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh4440\viewkind0
+\deftab720
+\pard\pardeftab720\sl360\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 #include\cf4 \strokec4 \'a0\cf5 \strokec5 <stdio.h>\cf6 \cb1 \strokec6 \
+\cf2 \cb3 \strokec2 #include\cf4 \strokec4 \'a0\cf5 \strokec5 <stdlib.h>\cf6 \cb1 \strokec6 \
+\cf2 \cb3 \strokec2 #include\cf4 \strokec4 \'a0\cf5 \strokec5 <string.h>\cf6 \cb1 \strokec6 \
+\
+\
+\
+\cf4 \cb3 \strokec4 char\cf6 \strokec6 *\'a0\cf7 \strokec7 my_strip\cf6 \strokec6 (\cf4 \strokec4 char\cf6 \strokec6 *\'a0\cf8 \strokec8 str\cf6 \strokec6 )\'a0\{\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf4 \strokec4 char\cf6 \strokec6 \'a0\cf8 \strokec8 upd_str\cf6 \strokec6 [\cf7 \strokec7 strlen\cf6 \strokec6 (str)];\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf4 \strokec4 int\cf6 \strokec6 \'a0c\'a0=\'a0\cf9 \strokec9 0\cf6 \strokec6 ;\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf4 \strokec4 int\cf6 \strokec6 \'a0index\'a0=\'a0\cf9 \strokec9 0\cf6 \strokec6 ;\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf4 \strokec4 char\cf6 \strokec6 \'a0*adrs\'a0=\'a0str;\cb1 \
+\
+\cb3 \'a0\'a0\'a0\'a0\cf10 \strokec10 //upd_str\'a0=(char*\'a0)malloc(strlen(str)*sizeof(char));\cf6 \cb1 \strokec6 \
+\cf10 \cb3 \strokec10 /*\cf6 \cb1 \strokec6 \
+\cf10 \cb3 \strokec10 \'a0\'a0\'a0\'a0if\'a0(upd_str\'a0==\'a0NULL)\'a0\{\cf6 \cb1 \strokec6 \
+\cf10 \cb3 \strokec10 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0perror("malloc\'a0failed");\cf6 \cb1 \strokec6 \
+\cf10 \cb3 \strokec10 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0exit(1);\cf6 \cb1 \strokec6 \
+\cf10 \cb3 \strokec10 \'a0\'a0\'a0\'a0\}\cf6 \cb1 \strokec6 \
+\cf10 \cb3 \strokec10 */\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\cf2 \strokec2 while\cf6 \strokec6 (\cf8 \strokec8 str\cf6 \strokec6 [c]\'a0!=\'a0\cf5 \strokec5 '\cf11 \strokec11 \\0\cf5 \strokec5 '\cf6 \strokec6 )\{\cb1 \
+\
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf10 \strokec10 //if\'a0i\'a0see\'a0the\'a0caracter\'a0after\'a0that\'a0i\'a0see\'a0a\'a0space,\'a0i\'a0should\'a0take\'a0it\'a0in\'a0\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf10 \strokec10 //if\'a0i\'a0space\'a0after\'a0space\'a0i\'a0will\'a0ignore\'a0it\'a0and\'a0increment\'a0until\'a0next\'a0character\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf10 \strokec10 //\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf2 \strokec2 if\cf6 \strokec6 \'a0(\cf8 \strokec8 str\cf6 \strokec6 [c]\'a0!=\'a0\cf9 \strokec9 32\cf6 \strokec6 )\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf8 \strokec8 upd_str\cf6 \strokec6 [index++]\'a0=\'a0\cf8 \strokec8 str\cf6 \strokec6 [c];\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf2 \strokec2 if\cf6 \strokec6 \'a0(\cf8 \strokec8 str\cf6 \strokec6 [c]\'a0!=\'a0\cf9 \strokec9 32\cf6 \strokec6 \'a0&&\'a0\cf8 \strokec8 str\cf6 \strokec6 [c+\cf9 \strokec9 1\cf6 \strokec6 ]\'a0==\'a0\cf9 \strokec9 32\cf6 \strokec6 )\'a0\cf10 \strokec10 //\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf8 \strokec8 upd_str\cf6 \strokec6 [index++]\'a0=\'a0\cf5 \strokec5 '\'a0'\cf6 \strokec6 ;\'a0\'a0\'a0\cf10 \strokec10 //\'a0take\'a0the\'a0space\'a0into\'a0\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0c++;\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf10 \strokec10 //collect\'a0the\'a0string\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\}\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf2 \strokec2 if\cf6 \strokec6 \'a0(\cf8 \strokec8 str\cf6 \strokec6 [c-\cf9 \strokec9 1\cf6 \strokec6 ]\'a0==\'a0\cf5 \strokec5 '\'a0'\cf6 \strokec6 )\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf8 \strokec8 upd_str\cf6 \strokec6 [index-\cf9 \strokec9 1\cf6 \strokec6 ]\'a0=\'a0\cf5 \strokec5 '\cf11 \strokec11 \\0\cf5 \strokec5 '\cf6 \strokec6 ;\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf2 \strokec2 else\cf6 \strokec6 \'a0\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf8 \strokec8 upd_str\cf6 \strokec6 [index]\'a0=\'a0\cf5 \strokec5 '\cf11 \strokec11 \\0\cf5 \strokec5 '\cf6 \strokec6 ;\cb1 \
+\
+\cb3 \'a0\'a0\'a0\'a0\cf4 \strokec4 int\cf6 \strokec6 \'a0i\'a0=\'a0\cf9 \strokec9 0\cf6 \strokec6 ;\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf2 \strokec2 while\cf6 \strokec6 (\cf8 \strokec8 upd_str\cf6 \strokec6 [i]\'a0!=\'a0\cf5 \strokec5 '\cf11 \strokec11 \\0\cf5 \strokec5 '\cf6 \strokec6 )\{\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\cf8 \strokec8 str\cf6 \strokec6 [i]\'a0=\'a0\cf8 \strokec8 upd_str\cf6 \strokec6 [i];\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0i++;\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\}\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf8 \strokec8 str\cf6 \strokec6 [i]\'a0=\'a0\cf5 \strokec5 '\cf11 \strokec11 \\0\cf5 \strokec5 '\cf6 \strokec6 ;\'a0\cb1 \
+\
+\cb3 \'a0\'a0\'a0\cf10 \strokec10 //\'a0free(upd_str);\cf6 \cb1 \strokec6 \
+\cb3 \'a0\'a0\'a0\'a0\cb1 \
+\cb3 \'a0\'a0\'a0\'a0\cf2 \strokec2 return\cf6 \strokec6 \'a0str;\cb1 \
+\cb3 \}\cb1 \
+\
+\
+}

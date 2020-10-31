@@ -1,0 +1,22 @@
+5c5
+< \paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh4440\viewkind0
+---
+> \paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh4900\viewkind0
+8,11c8,11
+< \f0\fs24 \cf0 qwer\
+< qw. er\
+< q\
+< qwer\
+---
+> \f0\fs24 \cf0 qwerw\
+> qwerw   \
+> qw   \
+> qwerw      \
+14,16c14
+< werqwerqwerqwerqwerqwer. \
+< qwerqwerqwerqwerqwerqwer. \
+< qwerqwerqwerqwerqwerqwer          }
+\ No newline at end of file
+---
+> }
+\ No newline at end of file

@@ -1,0 +1,225 @@
+#include "headers.h"
+
+void trimBuff(char* buff);
+int interval_strcpy(char* c, char* buff, int beg, int end);
+
+Command* getCommand( GlobalNode* nodes, int* ret)
+//commands initialized in retriveCommandFromBuff fnx
+{
+    //we use write bc it is system level as read
+        //otherwise printf writes after read command
+    char prompt_display[10];
+    int nbr = snprintf(prompt_display, 10, "[%c%d]> ", nodes->syncd, nodes->nbrNodes);
+
+
+    write(0, prompt_display, nbr);
+    char buff[BUFFSIZE];
+    {
+        int red = read(IN, buff, BUFFSIZE);
+        buff[red] = 0;
+    }
+    trimBuff(buff);
+
+    Command* commands = retriveCommandFromBuff(buff, ret);
+
+    //free(commands);
+    return commands;
+}
+
+Command* retriveCommandFromBuff(char* buff, int* ret)
+{
+    int words=1, buffLen=0, beg=0, end;
+    //char* buffyonok;
+    int index = 0;
+    
+    int* spaces = calloc(BUFFSIZE, sizeof(int));
+    int spacesIndex=0;
+
+    //get the size of tokens in buff
+    for(buffLen=0; buff[buffLen] != 0; buffLen++)
+    {
+        if(buff[buffLen] == SPACE) 
+        {
+            //increment number of token in command
+            words++;
+            //because we need to know where spaces are
+                //located in the command string
+            spaces[spacesIndex++]=buffLen;
+        }
+    }
+    //also put the end of buff to spacess
+    //I dnot know why buffLen-1
+    spaces[spacesIndex++] = buffLen-1;
+    //printf("printing spaces...\n");
+    //for(int t=0; t<spacesIndex; t++)
+    //{
+    //    printf("%d", t);
+    //}
+    //printf("\n");
+    //for(int t=0; t<spacesIndex; t++)
+    //{
+    //    printf("%d", spaces[t]);
+    //}
+    //printf("\n");
+    spacesIndex = 0;
+
+    //if word are too small commands[1] might give overflow
+    words = words>2 ? words : 2;
+    
+    //initialize commands
+    Command *commands = calloc(words, sizeof(Command));
+
+    //as calloc sets to 0 => need to distinguish error from 0
+    commands[0].i = -1;
+    commands[1].i = -1;
+
+    //printf("array is %d\n", words);
+
+    //find how many tokens are in the command
+    //for(register int beg = 0, end; buff[beg] != 0; beg++)
+    while(beg < buffLen)
+    {
+        //because ls -l command has space, we are not using end
+        //end=*(spaces+spacesIndex++);
+
+        //printf("end is %d\n", end);
+        //printf("index is %d\n", index);
+        if (index < 2)
+        {
+            getFirst2Commands(commands, &index, buff, beg, /*end*/spaces, spacesIndex);
+            index++;
+            //if command is sync/ quit / ls => only 1 argument
+            if(commands[index-1].i>2) goto syncCommand;
+        }
+        else
+        {
+            if(commands[1].i == BLOCK && (commands[0].i == RM || index == 2) )
+            {
+                interval_strcpy(commands[index++].c, buff, beg, *(spaces + spacesIndex));
+                //printf("here is char\n");   
+            }else
+            {
+                int val = interval_atoi(buff, beg, *(spaces + spacesIndex));
+                //printf("val is %d\n", val);
+                commands[index++].i = val;
+                //printf("here is int\n");
+            }
+            
+        }
+        //printf("command - %d\n", commands[index-1]);
+
+        //fixed
+        beg = *(spaces + spacesIndex++)+1;
+    }
+    syncCommand:
+    free(spaces);
+    //size of commands array
+    *ret = index;
+    return commands;
+}
+
+//converts chars from beg to end (inclusive, end=Length) to int
+int interval_atoi(char* buff, int beg, int end)
+{
+    //printf("\nbuff is ::%s\nbeg is %d, end is %d\n", buff, beg, end);
+    int ret=0, i=end-1, multiple=-1;
+    for(; i>=beg; i--)
+    {
+        //printf("char is %c\n", buff[i]);
+        if(buff[i]>='0' && buff[i]<='9')
+        {
+            if(++multiple!=0)
+                ret += (buff[i]-'0') * my_pow(10, multiple);
+            else
+                ret += (buff[i]-'0');
+        }   
+        else if(buff[i] == '*')
+        {
+            return INT_MAX;
+        }
+    }
+    return ret;
+}
+
+//end argument is replaced with spaces, spaceIndex => bc ls -l command has space
+int getFirst2Commands(Command* commands, int* index, char* buff, int beg, int* spaces, int spaceIndex)
+{
+    //in globalConstants.c
+    extern const char* LIST[2][5];
+
+    int j;
+    //testing
+    /*for(int i=0; i<2; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            printf("LIST[%d][%d] = %s\n", i, j, LIST[i][j]);
+        }
+        printf("\n");
+    }*/
+
+    for(j=0; j<COMMANDLENGTH; j++)
+    {
+        register int k;
+        //printf("\nLIST vs buff %c == %c\n", LIST[*index][j][0], buff[beg]);
+        if( LIST[*index][j][0] == buff[beg])
+        {
+            for(k = 1; k<STRINGLEN && beg+k < *(spaces + spaceIndex); k++)
+            {
+                //printf("LIST vs buff %c == %c", LIST[*index][j][k], buff[beg+k]);
+                if( LIST[*index][j][k] != buff[beg+k]) return -1;
+                //printf(" = > DONE\n");
+            }
+            //printf("from LIST is %s\n", LIST[*index][j]);
+
+            //printf("next val is %c: %d\n", LIST[*index][j][k], LIST[*index][j][k]);
+            
+            /** cn use incomplete commands not allowed **/
+            //if comment the if clause, cn write q, qu, qui instead of quit
+            if(LIST[*index][j][k] != SPACE && LIST[*index][j][k] != 0) return -1;
+            
+            break;
+        }
+    }
+    //commands are interpreted as they appear in COMMANDS array
+        //0 at index 0 is add, 1 at 0 - rm, 1 at 1 is block
+    commands[*index].i = j;
+    //printf("commands[%d] - %d\n", *index, j);
+    return 0;
+}
+
+int my_pow(int base, int power)
+{
+    if(power == 1) return base;
+    if(power == 0) return 1;
+    return base * my_pow(base, power-1);
+}
+
+void trimBuff(char* buff)
+{
+    char tmpBuff[BUFFSIZE];
+    strcpy(tmpBuff, buff);
+    char tmpChar = SPACE;
+    for(int i = 0, j=0;; i++)
+    {
+        if( tmpChar == SPACE && tmpBuff[i] == SPACE ) continue;
+        buff[j++] = tmpBuff[i];
+        if( tmpBuff[i] == '\n' )
+        {
+            buff[j] = 0;
+            if(i == 0) break;
+            if(tmpChar == SPACE) buff[--j] = 0;
+            break;
+        }
+        tmpChar = tmpBuff[i];
+    }
+}
+
+int interval_strcpy(char* c, char* buff, int beg, int end)
+{
+    int i;
+    for(i=0; beg + i < end; i++) c[i] = buff[beg+i];
+    c[i] = 0;
+
+    return 0;
+}
